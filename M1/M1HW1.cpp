@@ -10,9 +10,10 @@ int main() {
 string name = "\"The Princess Bride\" "; 
 string date = "1987 "; 
 string quote1 = "Inigo Montoya: Hello. My name is Inigo Montoya. You killed my father. Prepare to die."; 
-string quote2 = "[Vizzini has just cut the rope The Dread Pirate Roberts is climbing up] Vizzini: HE DIDN'T FALL? INCONCEIVABLE! Inigo Montoya: You keep using that word. I do not think it means what you think it means.";
+string quote2line1 = "[Vizzini has just cut the rope The Dread Pirate Roberts is climbing up] ";
+string quote2line2 = "Vizzini: HE DIDN'T FALL? INCONCEIVABLE! ";
+string quote2line3 = "Inigo Montoya: You keep using that word. I do not think it means what you think it means.   ";
 string gross = "30.8 million.";
-
 cout << "The movie " << name; 
 cout << "came out in " << date; 
 cout << "and grossed " << gross <<endl;
@@ -23,5 +24,10 @@ cout << "Quote 1" << endl;
 cout << quote1 << endl;
 cout << endl;
 cout << "Quote 2" << endl;
-cout << quote2 << endl;
+cout << quote2line1 << endl;
+cout << endl;
+cout << quote2line2 << endl;
+cout << endl;
+cout << quote2line3 << endl;
+cout << endl;
 }
