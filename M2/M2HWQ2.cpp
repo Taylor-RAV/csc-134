@@ -8,8 +8,8 @@ using namespace std;
 int main() {
 //declare variables
 //non changing
-const double cost_per_cubic_foot = 0.23;
-const double charge_per_cubic_foot = 0.5;
+const double cost_per_cubic_foot = 0.3;
+const double charge_per_cubic_foot = 0.52;
 
 //create variables
 double length, width, height, volume; //all in feet
