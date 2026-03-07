@@ -31,7 +31,7 @@ int main() {
     cout << "Tax:        $" << tax_amount << endl;
     cout << "Total:      $" << total << endl;
     cout << endl;
-    cout << " Have a great Day!"<< endl;
+    cout << "Have a great Day!"<< endl;
     cout << endl;
     cout << endl;
 
