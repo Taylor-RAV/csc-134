@@ -1,7 +1,7 @@
 // CSC 134
 // M3T1 
-// norrisa
-// 2/17/2025
+// James Taylor
+// 3/7/2026
 // Ask the user for the width and length of two rectangles
 // Find the area
 
@@ -26,8 +26,15 @@ int main() {
     cin >> wid2;
 
     // Find the area
+    area1 = len1 * wid1;
+    area2 = len2 * wid2;
+    double total_area = area1 + area2;
 
     // Print the area
-
+    cout << "Area of first rectangle:        " << area1 << endl;
+    cout << "Area of second rectangle:       " << area2 << endl;
+    cout << "Total area of both rectangles:  " << total_area << endl;
+    cout << endl;
+    cout << endl;
     return 0;
 }
