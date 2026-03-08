@@ -1,5 +1,5 @@
 // CSC 134
-// M1LAB
+// M2HWQ2
 // James Taylor
 // 3/6/2026
 #include <iostream>
