@@ -1,6 +1,6 @@
 // CSC 134
 // M3T2 - Craps!
-// norrisa
+// James Taylor
 // 2/16/26
 // Start the game of craps.
 #include <iostream>
