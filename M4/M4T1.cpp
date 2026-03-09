@@ -1,7 +1,7 @@
 // CSC 134
 // M4T1 - While
-// norrisa
-// 3/10/2025
+// James Taylor
+// 3/9/2026
 
 
 #include <iostream>

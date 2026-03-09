@@ -1,7 +1,8 @@
 // CSC 134 
 // M2HWQ3
 // James Taylor
-// 01_26_26
+// 3/9/26
+// going for gold
 #include <iostream> 
 using namespace std; 
 

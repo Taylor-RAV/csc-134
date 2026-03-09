@@ -2,6 +2,7 @@
 // M2HWQ2
 // James Taylor
 // 3/6/2026
+// going for gold
 #include <iostream>
 #include <iomanip>
 using namespace std;
