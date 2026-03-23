@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1774278644 source:c:\users\draco\desktop\school\csc-134\m5t2\main.cpp
+	<iostream>
+	"headers.h"
+
+1774278093 c:\users\draco\desktop\school\csc-134\m5t2\headers.h
+	<iostream>
+
