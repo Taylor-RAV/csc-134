@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1775056582 source:c:\users\draco\desktop\school\csc-134\m5hw1\main.cpp
+	<iostream>
+	<iomanip>
+	<cmath>
+
