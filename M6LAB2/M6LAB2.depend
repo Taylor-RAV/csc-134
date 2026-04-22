@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1776697639 source:c:\users\draco\desktop\school\csc-134\m6lab2\main.cpp
+	<iostream>
+	<string>
+	<vector>
+
