@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="RPG_System/RPG_System.cbp" />
+		<Project filename="Class_Gen/Class_Gen.cbp" />
+		<Project filename="Mansion_phase/Mansion_phase.cbp" />
+		<Project filename="Dungeon_phase/Dungeon_phase.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>
