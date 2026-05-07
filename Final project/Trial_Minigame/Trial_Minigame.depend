@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1778076370 source:c:\users\draco\desktop\school\csc-134\final project\trial_minigame\main.cpp
+	<iostream>
+	<string>
+	<ctime>
+	<conio.h>
+	"shared_data.h"
+
+1778076370 c:\users\draco\desktop\school\csc-134\final project\rpg_system\shared_data.h
+	<iostream>
+	<vector>
+	<string>
+	<fstream>
+	<filesystem>
+

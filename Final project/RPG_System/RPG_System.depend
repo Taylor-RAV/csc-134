@@ -1,17 +1,1 @@
 # depslib dependency file v1.0
-1777993204 source:c:\users\draco\desktop\school\csc-134\final project\rpg_system\main.cpp
-	<iostream>
-	<vector>
-	<string>
-	<filesystem>
-	<fstream>
-	<algorithm>
-	"shared_data.h"
-
-1777992061 c:\users\draco\desktop\school\csc-134\final project\rpg_system\shared_data.h
-	<string>
-	<vector>
-	<iostream>
-	<fstream>
-	<filesystem>
-

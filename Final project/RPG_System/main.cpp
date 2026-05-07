@@ -1,141 +1,193 @@
+/**
+ * @file RPG_System.cpp
+ * @brief The Entry Hub. Manages character loading and the City Guard narrative.
+ * Updated to restore narrative flavor and improve playtester readability.
+ */
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <filesystem>
-#include <fstream>
-#include <algorithm>
+#include <conio.h>
 #include "shared_data.h"
 
 namespace fs = std::filesystem;
 using namespace std;
 
-// --- HUB MAIN ---
-int main(int argc, char* argv[]) {
-    // Note: Removed the path fix here to prevent the "Blank Screen" bug.
+/**
+ * @brief Displays the Character Sheet header at the top of the hub.
+ */
+void printStats(const Character& pc) {
+    cout << "======================================================================" << endl;
+    cout << " [LVL " << pc.level << " " << pc.race << " " << pc.charClass << "] " << pc.name << " of " << pc.playerName << endl;
+    cout << " HP: " << pc.hp << "/" << pc.maxHp << " | AC: " << pc.ac << " | GOLD: " << pc.gold << "gp" << endl;
 
+    if(pc.milestoneReached) {
+        cout << " ** RITE OF PASSAGE AWAITS: VISIT THE SCRIBE TO ADVANCE **" << endl;
+    }
+
+    cout << " INV: ";
+    if (pc.inventory.empty()) {
+        cout << "[Empty]";
+    } else {
+        for (const auto& i : pc.inventory) cout << "[" << i << "] ";
+    }
+    cout << "\n======================================================================" << endl;
+}
+
+int main(int argc, char* argv[]) {
     string countryName = "", citizenName = "";
     Character pc;
-    bool countryActive = true;
-    bool inTown = true;
 
-    // Handle incoming character data from other projects
+    // --- AUTO-LOGIN HANDOFF ---
     if (argc >= 3) {
         countryName = argv[1];
         citizenName = argv[2];
-        if (loadCitizen(pc, countryName, citizenName)) goto townSquare;
+        if (loadCitizen(pc, countryName, citizenName)) {
+            goto townSquare;
+        }
     }
 
+    // --- NATION SELECTION ---
     while (true) {
-        if (countryName == "") {
-            cout << "\n[ GATE OF THE IRON CROWN ]" << endl;
-            cout << "An armored guard blocks your path. 'Halt!'" << endl;
-            cout << "Guard: 'Do you hail from a recognized Nation?' (y/n): ";
-            char gate; cin >> gate; cin.ignore(1000, '\n');
+        system("cls");
+        cout << "\n--- THE GATES OF THE IRON CROWN ---" << endl;
+        cout << "A gruff City Guard blocks your path with a heavy halberd." << endl;
+        cout << "Guard: 'State your Nation for the ledger before you enter!'" << endl;
+        cout << "--------------------------------------------------------" << endl;
 
-            if (tolower(gate) == 'n') {
-                cout << "\nGuard: 'An outsider, eh? Tell me the name of your people: ";
-                getline(cin, countryName);
-                cout << "Guard: 'Very well. Go to the Registration Tent to record your name.'" << endl;
-
-                // FIXED CMD: Removed the sub-path to find Class_gen.exe in the same folder
-                string cmd = "start /WAIT \"\" \"Class_Gen.exe\" \"" + countryName + "\"";
-                system(cmd.c_str());
-                return 0;
-            } else {
-                vector<string> countries;
-                if (fs::exists("players")) {
-                    for (const auto& entry : fs::directory_iterator("players"))
-                        if (entry.is_directory()) countries.push_back(entry.path().filename().string());
-                }
-                if (countries.empty()) {
-                    cout << "\nGuard: 'The records are empty! What nation do you represent?'" << endl;
-                    getline(cin, countryName);
-                } else {
-                    cout << "\nGuard: 'Which nation do you hale from?'" << endl;
-                    for(size_t i=0; i<countries.size(); i++) cout << i+1 << ". " << countries[i] << endl;
-                    int pChoice; cin >> pChoice; cin.ignore(1000, '\n'); countryName = countries[pChoice-1];
+        vector<string> nations;
+        if (fs::exists("players")) {
+            for (const auto& entry : fs::directory_iterator("players")) {
+                if (entry.is_directory()) {
+                    nations.push_back(entry.path().filename().string());
                 }
             }
         }
 
-        countryActive = true;
-        while (countryActive) {
-            if (citizenName == "") {
-                vector<string> citizens;
-                string pPath = "players/" + countryName;
-                if (fs::exists(pPath)) {
-                    for (const auto& entry : fs::directory_iterator(pPath))
-                        if (entry.path().extension() == ".txt") citizens.push_back(entry.path().stem().string());
-                }
-                if (citizens.empty()) {
-                    cout << "\nGuard: 'I see no record of your name here. Off to the Registration Tent!'" << endl;
-                    string cmd = "start /WAIT \"\" \"Class_Gen.exe\" \"" + countryName + "\"";
-                    system(cmd.c_str());
-                    return 0;
-                } else {
-                    cout << "\n[ NATION: " << countryName << " ]" << endl;
-                    cout << "Guard: 'And who might you be, specifically?'" << endl;
-                    for(size_t i=0; i<citizens.size(); i++) cout << i+1 << ". " << citizens[i] << endl;
-                    cout << citizens.size()+1 << ". [Register New Citizen]\nChoice: ";
-                    int cChoice; cin >> cChoice; cin.ignore(1000, '\n');
-                    if (cChoice > (int)citizens.size()) {
-                        string cmd = "start /WAIT \"\" \"Class_Gen.exe\" \"" + countryName + "\"";
-                        system(cmd.c_str());
-                        return 0;
+        for (size_t i = 0; i < nations.size(); i++) {
+            cout << i + 1 << ". " << nations[i] << endl;
+        }
+        cout << nations.size() + 1 << ". [Register New Nation/Party]" << endl;
+        cout << "\nChoice: ";
+
+        int nChoice;
+        if (!(cin >> nChoice)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            continue;
+        }
+
+        if (nChoice == (int)nations.size() + 1) {
+            system("start /WAIT \"\" \"Class_Gen.exe\"");
+            continue;
+        }
+
+        if (nChoice > 0 && nChoice <= (int)nations.size()) {
+            countryName = nations[nChoice - 1];
+        } else {
+            continue;
+        }
+
+        // --- CITIZEN SELECTION ---
+        while (true) {
+            system("cls");
+            cout << "\n--- REGISTRY OF " << countryName << " ---" << endl;
+            cout << "Guard: 'And which citizen are you? Don't make me ask twice!'" << endl;
+            cout << "--------------------------------------------------------" << endl;
+
+            vector<string> citizens;
+            string pPath = "players/" + countryName;
+            if (fs::exists(pPath)) {
+                for (const auto& entry : fs::directory_iterator(pPath)) {
+                    if (entry.path().extension() == ".txt") {
+                        citizens.push_back(entry.path().stem().string());
                     }
-                    citizenName = citizens[cChoice-1];
                 }
             }
 
-            if (!loadCitizen(pc, countryName, citizenName)) { citizenName = ""; continue; }
+            for (size_t i = 0; i < citizens.size(); i++) {
+                cout << i + 1 << ". " << citizens[i] << endl;
+            }
+            cout << citizens.size() + 1 << ". [New Traveler]" << endl;
+            cout << citizens.size() + 2 << ". [Back to Nations]" << endl;
+            cout << "\nChoice: ";
 
-        townSquare:
-            inTown = true;
-            while(inTown) {
-                loadCitizen(pc, countryName, citizenName);
+            int cChoice;
+            cin >> cChoice;
 
-                // CHECK FOR SPECIAL TRIAL ITEM
-                bool hasSword = false;
-                for(const string& item : pc.inventory) if(item == "Delian Sword") hasSword = true;
+            if (cChoice == (int)citizens.size() + 1) {
+                system(("start /WAIT \"\" \"Class_Gen.exe\" \"" + countryName + "\"").c_str());
+                continue;
+            }
+            if (cChoice == (int)citizens.size() + 2) break;
 
-                cout << "\n================ TOWN SQUARE ================" << endl;
-                cout << "Citizen: " << pc.name << " | Class: " << pc.charClass << " | Gold: " << pc.gold << "gp" << endl;
-                cout << "1. Adventure | 2. Marketplace | 3. Rest (10gp)\n4. Switch Citizen | 5. Change Country | 6. Exit";
-                if(hasSword) cout << "\n7. [TRIAL OF THE IRON CROWN]";
-                cout << "\n> ";
-
-                int choice;
-                if (!(cin >> choice)) { cin.clear(); cin.ignore(1000, '\n'); continue; }
-
-                if (choice == 1) {
-                    saveCitizen(pc);
-                    string prog = pc.inDungeon ? "Dungeon_phase.exe" : "Mansion_phase.exe";
-                    string fullCmd = "start \"\" \"" + prog + "\" \"" + countryName + "\" \"" + citizenName + "\"";
-                    system(fullCmd.c_str());
-                    return 0;
-                }
-                else if (choice == 2) {
-                    saveCitizen(pc);
-                    string shopCmd = "start /WAIT \"\" \"Class_Gen.exe\" \"" + countryName + "\" \"" + citizenName + "\" \"SHOP\"";
-                    system(shopCmd.c_str());
-                }
-                else if (choice == 3) {
-                    if (pc.gold >= 10) {
-                        pc.gold -= 10; pc.hp = 40;
-                        saveCitizen(pc); cout << "[INN] Restored health!" << endl;
-                    } else cout << "[INN] Not enough gold." << endl;
-                }
-                else if (choice == 4) { citizenName = ""; inTown = false; }
-                else if (choice == 5) { countryName = ""; citizenName = ""; inTown = false; countryActive = false; }
-                else if (choice == 6) { return 0; }
-                else if (choice == 7 && hasSword) {
-                    saveCitizen(pc);
-                    string tCmd = "start /WAIT \"\" \"Trial_Minigame.exe\" \"" + countryName + "\" \"" + citizenName + "\"";
-                    system(tCmd.c_str());
+            if (cChoice > 0 && cChoice <= (int)citizens.size()) {
+                citizenName = citizens[cChoice - 1];
+                if (loadCitizen(pc, countryName, citizenName)) {
+                    goto townSquare;
                 }
             }
+        }
+    }
+
+townSquare:
+    while (true) {
+        system("cls");
+        cout << "\n--- THE COBBLESTONE TOWN SQUARE ---" << endl;
+        printStats(pc);
+        cout << "The town is tense. Green ooze seeps through the sewer grates." << endl;
+        cout << "1. Adventure (Investigate the Ascension Mansion)" << endl;
+        cout << "2. The Iron Anvil (Visit the Blacksmith)" << endl;
+        cout << "3. The Bubbling Cauldron (Visit the Apothecary)" << endl;
+        cout << "4. The Scribe's Archive (Request Rite of Passage)" << endl;
+        cout << "5. The Restful Inn (10gp - Restore HP)" << endl;
+        cout << "6. Log Out (Switch Citizen)" << endl;
+        cout << "7. Exit Game" << endl;
+        cout << "\nWhere will you go? ";
+
+        int choice;
+        cin >> choice;
+
+        string cmdBase = "start /WAIT \"\" \"Class_Gen.exe\" \"" + pc.playerName + "\" \"" + pc.name + "\" ";
+
+        if (choice == 1) {
+            saveCitizen(pc);
+            string prog = pc.inDungeon ? "Dungeon_phase.exe" : "Mansion_phase.exe";
+            system(("start \"\" \"" + prog + "\" \"" + pc.playerName + "\" \"" + pc.name + "\"").c_str());
+            return 0;
+        }
+        else if (choice == 2) {
+            system((cmdBase + "BLACKSMITH").c_str());
+            loadCitizen(pc, pc.playerName, pc.name);
+        }
+        else if (choice == 3) {
+            system((cmdBase + "APOTHECARY").c_str());
+            loadCitizen(pc, pc.playerName, pc.name);
+        }
+        else if (choice == 4) {
+            system((cmdBase + "SCRIBE").c_str());
+            loadCitizen(pc, pc.playerName, pc.name);
+        }
+        else if (choice == 5) {
+            if (pc.gold >= 10) {
+                pc.gold -= 10;
+                pc.hp = pc.maxHp;
+                saveCitizen(pc);
+                cout << "\nYou rest deeply. HP and spirit restored!" << endl;
+            } else {
+                cout << "\nThe Innkeeper scoffs. 'No coin, no bed!'" << endl;
+            }
+            system("pause");
+        }
+        else if (choice == 6) {
+            saveCitizen(pc);
+            system("start \"\" \"RPG_System.exe\"");
+            return 0;
+        }
+        else if (choice == 7) {
+            saveCitizen(pc);
+            return 0;
         }
     }
 }
-
-

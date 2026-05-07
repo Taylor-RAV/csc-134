@@ -1,0 +1,14 @@
+Iron crown
+James
+Human
+Fighter
+13 11 12 10 10 10
+1 0 44 44 18 115
+6
+Chainmail
+Longsword
+Shield
+Silver Key
+Lettered Books
+Lettered Books
+0 0 1

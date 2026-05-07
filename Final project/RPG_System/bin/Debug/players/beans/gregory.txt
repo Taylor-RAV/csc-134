@@ -1,0 +1,11 @@
+beans
+gregory
+Halfling
+Wizard
+10 13 13 15 12 11
+1 0 28 28 11 289
+3
+Spellbook
+Silver Key
+Lettered Books
+0 1 1

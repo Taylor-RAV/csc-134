@@ -5,5 +5,6 @@
 		<Project filename="Class_Gen/Class_Gen.cbp" />
 		<Project filename="Mansion_phase/Mansion_phase.cbp" />
 		<Project filename="Dungeon_phase/Dungeon_phase.cbp" />
+		<Project filename="Trial_Minigame/Trial_Minigame.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
