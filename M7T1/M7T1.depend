@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1778273654 source:c:\users\draco\desktop\school\csc-134\m7t1\main.cpp
+	<iostream>
+	<string>
+	<vector>
+	<algorithm>
+	<iomanip>
+	<windows.h>
+
