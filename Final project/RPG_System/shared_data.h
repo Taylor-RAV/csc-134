@@ -1,8 +1,8 @@
 /**
  * @file shared_data.h
- * @author [Your Name]
- * @brief The data persistence bridge. Updated to include Milestone and Ascension flags.
- * @date 2026-05-06
+ * @author James Taylor
+ * @brief THE OOZING CROWN: Master Data Bridge.
+ * Standardized structure for cross-executable character persistence.
  */
 
 #ifndef SHARED_DATA_H
@@ -13,35 +13,29 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
 
 namespace fs = std::filesystem;
 using namespace std;
 
-/**
- * @struct Character
- * @brief The "Source of Truth" for player data across all executables.
- */
 struct Character {
-    string playerName; // The Nation/Party Name
-    string name;       // The Character Name
+    string playerName;
+    string name;
     string race;
     string charClass;
     int baseStats[6];  // STR, DEX, CON, INT, WIS, CHA
     int level = 1;
-    bool milestoneReached = false; // Flag for "Rite of Passage" eligibility
+    bool milestoneReached = false;
     int hp = 40;
     int maxHp = 40;
     int ac = 12;
     int gold = 100;
     vector<string> inventory;
-    bool inDungeon = false; // Set to true once the Study puzzle is solved
-    bool rackMoved = false; // Puzzle flag for the Kitchen/Study connection
-    int lastRoom = 0;       // Deepest floor reached in the Oubliette
+    bool inDungeon = false;
+    bool rackMoved = false;
+    int lastRoom = 0;
 };
 
-/**
- * @brief Saves the character to players/[Nation]/[Name].txt
- */
 inline bool saveCitizen(const Character& pc) {
     string path = "players/" + pc.playerName;
     if (!fs::exists(path)) fs::create_directories(path);
@@ -58,9 +52,6 @@ inline bool saveCitizen(const Character& pc) {
     return true;
 }
 
-/**
- * @brief Loads character from players/[Nation]/[Name].txt
- */
 inline bool loadCitizen(Character& pc, string nation, string name) {
     ifstream fin("players/" + nation + "/" + name + ".txt");
     if (!fin) return false;
