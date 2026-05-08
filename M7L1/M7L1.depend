@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1778271786 source:c:\users\draco\desktop\school\csc-134\final project\m7l1\main.cpp
+	<iostream>
+	<vector>
+	<random>
+	<ctime>
+	<algorithm>
+	<conio.h>
+	<map>
+	<queue>
+	<iomanip>
+
