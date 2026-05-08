@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1778270617 source:c:\users\draco\desktop\school\csc-134\final project\m6hw1\main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<algorithm>
+	<conio.h>
+	<ctime>
+

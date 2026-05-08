@@ -1,0 +1,8 @@
+james
+hats
+Fighter
+15 14 14 12 11 7
+1 -12 48 12 100
+1
+Rusty Key
+2
